@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Menu, X, Calculator } from "lucide-react";
+import { Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import calculateTaxBreakdown from "../utils/taxCalculation";
 import ContactDialog from "../components/ContactDialog";
+import TaxCalculatorHeader from "../components/tax-calculator/TaxCalculatorHeader";
+import TaxCalculatorFooter from "../components/tax-calculator/TaxCalculatorFooter";
 
 // Form state interfaces
 interface TaxpayerDetails {
@@ -66,7 +67,6 @@ export default function IncomeTaxCalculator() {
   const [incomeDetails, setIncomeDetails] = useState<IncomeDetails>(defaultIncomeDetails);
   const [deductionDetails, setDeductionDetails] = useState<DeductionDetails>(defaultDeductionDetails);
   const [result, setResult] = useState(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleTaxpayerChange = (field: keyof TaxpayerDetails, value: string) => {
     setTaxpayerDetails(prev => ({ ...prev, [field]: value }));
@@ -137,48 +137,7 @@ export default function IncomeTaxCalculator() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-lg sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-3">
-              <img
-                src="/lovable-uploads/6f9be28c-0028-4e58-9cf4-f247b041baea.png"
-                alt="Know Your Tax"
-                className="h-20 w-auto"
-              />
-              <div className="text-2xl font-bold text-gray-900">Know Your Tax</div>
-            </div>
-            <nav className="hidden md:flex space-x-8">
-              <Link to="/" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Home</Link>
-              <Link to="/services" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Services</Link>
-              <Link to="/about" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">About</Link>
-              <Link to="/testimonials" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Testimonials</Link>
-              <Link to="/tax-calculator" className="text-blue-600 font-medium">Tax Calculator</Link>
-              <ContactDialog taxCalculationData={taxCalculationData} />
-            </nav>
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-          {isMenuOpen && (
-            <div className="md:hidden py-4 border-t border-gray-200">
-              <nav className="flex flex-col space-y-4">
-                <Link to="/" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Home</Link>
-                <Link to="/services" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Services</Link>
-                <Link to="/about" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">About</Link>
-                <Link to="/testimonials" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Testimonials</Link>
-                <Link to="/tax-calculator" className="text-blue-600 font-medium">Tax Calculator</Link>
-                <div className="pt-2">
-                  <ContactDialog taxCalculationData={taxCalculationData} />
-                </div>
-              </nav>
-            </div>
-          )}
-        </div>
-      </header>
+      <TaxCalculatorHeader taxCalculationData={taxCalculationData} />
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -514,6 +473,9 @@ export default function IncomeTaxCalculator() {
           </Card>
         )}
       </div>
+
+      {/* Footer */}
+      <TaxCalculatorFooter />
     </div>
   );
 }
